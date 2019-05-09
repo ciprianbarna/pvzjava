@@ -1,3 +1,5 @@
+package pvz;
+
 public enum Dificultad {
 
     BAJA ("BAJA", 30, 5, 10),
@@ -11,7 +13,7 @@ public enum Dificultad {
     private final int sinZombies;  //turnos sin zombies
 
     //constructor
-    public Dificultad (String valor, int turnos, int numZombies, int sinZombies) {
+    Dificultad (String valor, int turnos, int numZombies, int sinZombies) {
         this.valor = valor;
         this.turnos = turnos;
         this.numZombies = numZombies;

@@ -4,6 +4,7 @@ public class Zombie extends Personaje {
 
     private int velocidad;
 
+
     public Zombie(){
         super.daño = 1;
         super.resistencia = 5;
