@@ -9,6 +9,5 @@ public class  Personaje {
     }
 
     public void imprimir(){
-
     }
 }

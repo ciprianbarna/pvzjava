@@ -7,8 +7,8 @@ public class Girasol extends Personaje {
 
     public Girasol (){
         super.resistencia = 1;
-        frecuencia = 10;
-        coste = 20;
+        this.frecuencia = 10;
+        this.coste = 20;
         super.daño = 0;
     }
 

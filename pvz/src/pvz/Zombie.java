@@ -7,7 +7,7 @@ public class Zombie extends Personaje {
     public Zombie(){
         super.daño = 1;
         super.resistencia = 5;
-        velocidad = 1;
+        this.velocidad = 1;
     }
 
     @Override
