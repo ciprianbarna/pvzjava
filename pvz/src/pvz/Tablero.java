@@ -11,5 +11,11 @@ public class Tablero {
         tablero = new Personaje[filas][columnas];
     }
 
+    public void imprimeTablero (){
+
+
+
+    }
+
 
 }

@@ -8,8 +8,8 @@ public class LanzaGuisantes extends  Personaje{
 
     public LanzaGuisantes(){
         super.resistencia = 3;
-        frecuencia = 1;
-        coste = 50;
+        this.frecuencia = 1;
+        this.coste = 50;
         super.daño = 1;
     }
 
