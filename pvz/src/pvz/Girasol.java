@@ -14,6 +14,6 @@ public class Girasol extends Personaje {
 
     @Override
     public void imprimir() {
-        System.out.println("G("+ resistencia + ")");
+        System.out.print("G("+ resistencia + ")");
     }
 }

@@ -13,6 +13,6 @@ public class Zombie extends Personaje {
 
     @Override
     public void imprimir() {
-        System.out.println("Z("+ resistencia + ")");
+        System.out.print("Z("+ resistencia + ")");
     }
 }

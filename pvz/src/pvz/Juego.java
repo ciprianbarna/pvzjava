@@ -13,14 +13,29 @@ public class Juego {
         Girasol g = new Girasol();
         LanzaGuisantes l = new LanzaGuisantes();
         Zombie z = new Zombie();
-        //Tablero tablero;
+        Tablero tablero = new Tablero(5,5);
 
-        g.imprimir();
-        l.imprimir();
-        z.imprimir();
+        //g.imprimir();
+        //l.imprimir();
+        //z.imprimir();
+
+        tablero.añadirPersonaje(g, 0,0);
+        tablero.añadirPersonaje(l,1,1);
+        tablero.añadirPersonaje(z,0,1);
 
 
-        //Interfaz inicio
+        System.out.println(tablero.getColumnas());
+        System.out.println(tablero.getFilas());
+        tablero.imprimeTablero();
+
+
+
+    }
+}
+
+
+
+//Interfaz inicio
 
         /*System.out.println("Bienvenido a Plants vs Zombies/n");
         System.out.println("NUEVO JUEGO/n");
@@ -51,5 +66,3 @@ public class Juego {
                 if (!tablero[i][j]) System.out.println("       ");
             }
         }*/
-    }
-}

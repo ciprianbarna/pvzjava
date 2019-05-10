@@ -15,6 +15,6 @@ public class LanzaGuisantes extends  Personaje{
 
     @Override
     public void imprimir() {
-        System.out.println("L("+ resistencia + ")");
+        System.out.print("L("+ resistencia + ")");
     }
 }
