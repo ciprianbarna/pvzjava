@@ -20,8 +20,6 @@ public class Juego {
     private int zombiesRestantes;
     private boolean salir = false;
     private boolean derrotado = false;
-    Zombie z = new Zombie(5,5);
-    Zombie z1 = new Zombie (4,5);
 
     public Juego(){
 
@@ -75,7 +73,7 @@ public class Juego {
                 case "G":
                     inputFilas = Integer.parseInt(comando[1]);
                     inputColumnas = Integer.parseInt(comando[2]);
-                    Girasol girasol = new Girasol(inputFilas, inputColumnas);
+                    Girasol girasol = new Girasol(inputFilas-1, inputColumnas-1);
                     if (tablero.casillaVacia(inputFilas-1, inputColumnas-1)){
                         tablero.añadirPersonaje(girasol, inputFilas-1, inputColumnas-1);
                     } else System.out.println("No se puede añadir un girasol en la posición indicada. Casilla ocupada");
@@ -87,7 +85,7 @@ public class Juego {
                 case "L":
                     inputFilas = Integer.parseInt(comando[1]);
                     inputColumnas = Integer.parseInt(comando[2]);
-                    LanzaGuisantes lanza = new LanzaGuisantes(inputFilas, inputColumnas);
+                    LanzaGuisantes lanza = new LanzaGuisantes(inputFilas-1, inputColumnas-1);
                     if (tablero.casillaVacia(inputFilas-1, inputColumnas-1)){
                         tablero.añadirPersonaje(lanza, inputFilas-1, inputColumnas-1);
                     } else System.out.println("No se puede añadir un lanza guisantes en la posición indicada. Casilla ocupada");
@@ -114,18 +112,17 @@ public class Juego {
                 System.out.println("Zombies restantes por salir: " + zombiesRestantes);
 
                 insertaZombies(turnosZombies, turno);
-                zombiesRestantes = zombiesRestantes - zombies.size(); // ESTO FUNCIONA MAL
                 zombies.forEach(zombie -> {
-                    if(zombie.getTiempoJugando()!=0) desplazarZombie(zombie);
-                    zombie.incrementarTiempoJugando();
+                    if(zombie.getTiempoJugando()!=0 && turno%2==0) desplazarZombie(zombie);
                 });
+
+                ataque();
 
                 zombies.forEach(zombie -> {
                    if(finPartida(zombie)) derrotado = true;
                 });
 
                 tablero.imprimeTablero();
-                System.out.println("DERROTADO: " + derrotado);
 
                 if(!derrotado) {
                     input = scanner.nextLine();
@@ -138,7 +135,7 @@ public class Juego {
         if (salir) System.out.println("Ha escogido cerrar la aplicación. Fin de la partida.");
         if (derrotado) System.out.println("Ha perdido la partida. Gracias por jugar!!!");
 
-
+        scanner.close();
     }
 
     public void actualizarSoles(){
@@ -151,6 +148,9 @@ public class Juego {
     public void actualizaTiempoJugando (){
         girasoles.forEach(girasol -> {
             girasol.incrementarTiempoJugando();
+        });
+        zombies.forEach(zombie -> {
+            zombie.incrementarTiempoJugando();
         });
     }
 
@@ -193,6 +193,7 @@ public class Juego {
             while(z > 0){
                 if (tablero.casillaVacia( filaIn, inputColumnas-1)){
                     Zombie zombie = new Zombie(filaIn, inputColumnas-1);
+                    zombiesRestantes--;
                     tablero.añadirPersonaje(zombie, filaIn, inputColumnas-1);
                     zombies.add(zombie);
                     z--;
@@ -205,5 +206,18 @@ public class Juego {
     public boolean finPartida(Zombie zombie){
         if (zombie.getColumna() == 0) return true;
         else return false;
+    }
+
+    public void ataque(){
+        lanzaGuisantes.forEach(lanza -> {
+            zombies.forEach(zombie -> {
+                if(lanza.getFila() == zombie.getFila()) {
+                    zombie.recibeDaño();
+                }
+                if(lanza.getFila() == zombie.getFila()-1){
+                    lanza.recibeDaño();
+                }
+            });
+        });
     }
 }

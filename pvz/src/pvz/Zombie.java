@@ -31,6 +31,10 @@ public class Zombie extends Personaje {
         return this.tiempoJugando;
     }
 
+    public void recibeDaño(){
+        resistencia--;
+    }
+
     @Override
     public void imprimir() {
         System.out.print("Z("+ resistencia + ")");

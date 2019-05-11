@@ -2,7 +2,7 @@ package pvz;
 
 public class LanzaGuisantes extends  Personaje{
 
-    private  int frecuencia;
+    private int frecuencia;
     private int coste;
 
 
@@ -17,6 +17,18 @@ public class LanzaGuisantes extends  Personaje{
 
     public int getCoste(){
         return coste;
+    }
+
+    public int getColumna(){
+        return this.columna;
+    }
+
+    public int getFila(){
+        return this.fila;
+    }
+
+    public void recibeDaño(){
+        resistencia --;
     }
 
     @Override
