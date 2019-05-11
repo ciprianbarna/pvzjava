@@ -7,12 +7,12 @@ public class LanzaGuisantes extends  Personaje{
 
 
     public LanzaGuisantes(int fila, int columna){
-        super.resistencia = 3;
+        this.resistencia = 3;
         this.frecuencia = 1;
         this.coste = 50;
-        super.daño = 1;
-        super.fila = fila;
-        super.columna = columna;
+        this.daño = 1;
+        this.fila = fila;
+        this.columna = columna;
     }
 
     public int getCoste(){

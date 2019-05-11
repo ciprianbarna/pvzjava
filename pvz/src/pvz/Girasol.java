@@ -2,19 +2,19 @@ package pvz;
 
 public class Girasol extends Personaje {
 
-    private  int frecuencia;
+    private int frecuencia;
     private int coste;
     private int solesNuevos;
 
     public Girasol (int fila, int columna){
-        super.resistencia = 1;
+        this.resistencia = 1;
         this.frecuencia = 2;
         this.solesNuevos = 10;
         this.coste = 20;
-        super.daño = 0;
-        super.tiempoJugando = 0;
-        super.fila = fila;
-        super.columna = columna;
+        this.daño = 0;
+        this.tiempoJugando = 0;
+        this.fila = fila;
+        this.columna = columna;
     }
 
     public int getFrecuencia(){
