@@ -23,13 +23,8 @@ public class Juego {
         System.out.println(tablero.getFilas());
         tablero.imprimeTablero();
 
-
-
     }
 
-    public static void actualizaTablero(Tablero tablero){
-
-    }
 }
 
 

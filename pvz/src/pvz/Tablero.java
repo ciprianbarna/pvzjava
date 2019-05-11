@@ -1,11 +1,14 @@
 package pvz;
 
+import java.util.Random;
+
 public class Tablero {
 
     private Personaje tablero [][];
     private int filas;
     private int columnas;
-    static final int solesInicial = 50; //soles al inicio de partida
+    private int soles = 50;
+
 
     public Tablero(int filas, int columnas){
         this.filas = filas;
@@ -22,29 +25,48 @@ public class Tablero {
         tablero[fila][columna] = personaje;
     }
 
-    //hay que hacer que distinga o ver como diferenciamos entre cada objeto
-    public void actualizaTablero (){
-        for (int i=0; i < columnas; i++){
-            for (int j=0; j < filas; j++) {
-                if (tablero[i][j] == Girasol){
+ // creo q esto se hace luego en jugo.java
+    public void generaZombies (Dificultad dificultad){
+        Random random = new Random();
+        int rand = random.nextInt(filas);
+        int numeroZombies = dificultad.getNumZombies();
 
-                }
-            }
+        while (numeroZombies > 0) {
+            Zombie zombie = new Zombie();
+            añadirPersonaje(zombie,rand, columnas-1);
+            numeroZombies--;
         }
-    }
 
+    }
 
 
     //hay que añadirle a este método las decoraciones
     public void imprimeTablero (){
         for (int i=0; i < filas; i++){
+            lineaDecoracion(columnas);
+            System.out.println();
             for (int j=0; j < columnas; j++){
-                if (tablero[i][j] != null) tablero[i][j].imprimir();
-                else System.out.print("*");
+                System.out.print("|");
+                if (tablero[i][j] != null){
+                    System.out.print(" ");
+                    tablero[i][j].imprimir();
+                    System.out.print(" ");
+                } else System.out.print("      ");
+
             }
+            System.out.print("|");
             System.out.println();
         }
+        lineaDecoracion(columnas);
 
+    }
+
+    private void lineaDecoracion(int columnas){
+        System.out.print("|");
+        for (int i = 0; i < columnas; i++){
+            if(i== columnas-1) System.out.print("------|");
+            else System.out.print("-------");
+        }
     }
 
     public int getFilas(){
