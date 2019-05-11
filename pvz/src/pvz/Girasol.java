@@ -7,13 +7,15 @@ public class Girasol extends Personaje {
     private int tiempoJugando;
     private int solesNuevos;
 
-    public Girasol (){
+    public Girasol (int fila, int columna){
         super.resistencia = 1;
         this.frecuencia = 2;
         this.solesNuevos = 10;
         this.coste = 20;
         super.daño = 0;
         this.tiempoJugando = 0;
+        super.fila = fila;
+        super.columna = columna;
     }
 
     public int getFrecuencia(){

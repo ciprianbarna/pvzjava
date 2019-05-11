@@ -4,10 +4,11 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
 
+
 public class Juego {
 
     private int soles = 50; //soles iniciales 50
-    private int turno = 1; //turno actual
+    private int turno = 0; //turno actual
     private String input;
     private int inputFilas;
     private int inputColumnas;
@@ -16,6 +17,7 @@ public class Juego {
     private ArrayList<Girasol> girasoles = new ArrayList<>();
     private ArrayList<LanzaGuisantes> lanzaGuisantes = new ArrayList<>();
     private ArrayList<Zombie> zombies = new ArrayList<>();
+    private int[] turnosZombies;
 
     public Juego(){
 
@@ -63,13 +65,9 @@ public class Juego {
 
                     System.out.println("Comienza la partida...");
 
+                    turno++;
+
                     tablero.imprimeTablero();
-
-                /*
-                System.out.println("filas" +  inputFilas);
-                System.out.println("columnas" + inputColumnas);
-                System.out.println("dificultad" + dificultad.getValor());*/
-
                     break;
 
                 case "G":
@@ -80,7 +78,7 @@ public class Juego {
                         tablero.añadirPersonaje(girasol, inputFilas-1, inputColumnas-1);
                     } else System.out.println("No se puede añadir un girasol en la posición indicada. Casilla ocupada");
                     girasoles.add(girasol);
-
+                    soles -= girasol.getCoste();
                     tablero.imprimeTablero();
                     turno++;
                     break;
@@ -93,6 +91,7 @@ public class Juego {
                         tablero.añadirPersonaje(lanza, inputFilas-1, inputColumnas-1);
                     } else System.out.println("No se puede añadir un lanza guisantes en la posición indicada. Casilla ocupada");
                     lanzaGuisantes.add(lanza);
+                    soles -= lanza.getCoste();
 
                     tablero.imprimeTablero();
                     turno++;
@@ -104,7 +103,7 @@ public class Juego {
             actualizaTiempoJugando();
             System.out.println("Tienes " +  soles + " soles y es el turno " + turno);
 
-
+            generaZombies(dificultad, turno);
 
             input = scanner.nextLine();
             comando = input.split(" ");
@@ -126,19 +125,43 @@ public class Juego {
         });
     }
 
-    public void generaZombies (Dificultad dificultad){
+    public void generaZombies (Dificultad dificultad, int turno){
         Random random = new Random();
         int filaIn = random.nextInt(inputFilas);
-        int turno = random.nextInt(dificultad.getTurnos()) + dificultad.getSinZombies();
+        int turnoZombie;
         int numeroZombies = dificultad.getNumZombies();
+        turnosZombies = new int[dificultad.getSinZombies() + dificultad.getTurnos()];
 
-        while (numeroZombies > 0) {
-            if(tablero.casillaVacia(filaIn, inputColumnas-1)){
-                Zombie zombie = new Zombie();
-                tablero.añadirPersonaje(zombie, filaIn, inputColumnas-1);
-                numeroZombies--;
-                zombies.add(zombie);
-            }
+        for (int i=0; i < turnosZombies.length-1; i++){
+            turnosZombies[i] = 0;
         }
+
+        for (int i= dificultad.getSinZombies(); i <= dificultad.getTurnos(); i++){
+            if(numeroZombies > 0){
+                turnoZombie = random.nextInt(dificultad.getTurnos()) + dificultad.getSinZombies();
+                turnosZombies[turnoZombie]++;
+                numeroZombies--;
+            }
+
+        }
+        /*
+        for (int i=0; i < turnosZombies.length-1; i++){
+            System.out.println("turno "+ i + " n zombi   " +  turnosZombies[i]);
+        }*/
+
+
+        if (turnosZombies[turno] > 0){
+            int z = turnosZombies[turno];
+            while(z > 0){
+                Zombie zombie = new Zombie();
+                if (tablero.casillaVacia(inputFilas, inputColumnas)){
+                    tablero.añadirPersonaje(zombie, filaIn, inputColumnas-1);
+                    zombies.add(zombie);
+                    z--;
+                } else filaIn = random.nextInt(inputFilas);
+            }
+
+        }
+
     }
 }
