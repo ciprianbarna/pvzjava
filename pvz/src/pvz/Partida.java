@@ -6,6 +6,28 @@ import java.util.*;
 public class Partida {
 
 
+
+    public static void main(String[] args) {
+
+
+        Juego juego = new Juego();
+        Girasol g = new Girasol();
+        LanzaGuisantes l = new LanzaGuisantes();
+        Zombie z = new Zombie();
+        Tablero tablero = new Tablero(5,5);
+
+        tablero.añadirPersonaje(g, 0,0);
+        tablero.añadirPersonaje(l,1,1);
+        tablero.añadirPersonaje(z,0,1);
+
+        //System.out.println(tablero.getColumnas());
+       // System.out.println(tablero.getFilas());
+        //tablero.imprimeTablero();
+
+        juego.interfazInicio();
+
+    }
+    /*
     private Scanner sc = new Scanner(System.in); // VARIABLE SCANNER
 
     public boolean inicioPartida (){
@@ -55,5 +77,5 @@ public class Partida {
             default:
                 System.out.println("No es una opcion valida");
         }
-    }
+    }*/
 }

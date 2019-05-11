@@ -25,6 +25,12 @@ public class Tablero {
         tablero[fila][columna] = personaje;
     }
 
+    public boolean casillaVacia(int fila, int columna){
+        if(tablero[fila][columna] == null) return true;
+        else return false;
+    }
+
+
  // creo q esto se hace luego en jugo.java
     public void generaZombies (Dificultad dificultad){
         Random random = new Random();
@@ -39,8 +45,6 @@ public class Tablero {
 
     }
 
-
-    //hay que añadirle a este método las decoraciones
     public void imprimeTablero (){
         for (int i=0; i < filas; i++){
             lineaDecoracion(columnas);
@@ -58,7 +62,7 @@ public class Tablero {
             System.out.println();
         }
         lineaDecoracion(columnas);
-
+        System.out.println();
     }
 
     private void lineaDecoracion(int columnas){

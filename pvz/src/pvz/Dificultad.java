@@ -13,7 +13,7 @@ public enum Dificultad {
     private final int sinZombies;  //turnos sin zombies
 
     //constructor
-    Dificultad (String valor, int turnos, int numZombies, int sinZombies) {
+     Dificultad (String valor, int turnos, int numZombies, int sinZombies) {
         this.valor = valor;
         this.turnos = turnos;
         this.numZombies = numZombies;
