@@ -17,6 +17,8 @@ public class Juego {
     private ArrayList<LanzaGuisantes> lanzaGuisantes = new ArrayList<>();
     private ArrayList<Zombie> zombies = new ArrayList<>();
     private int turnosZombies[];
+    Zombie z = new Zombie(5,5);
+    Zombie z1 = new Zombie (4,5);
 
     public Juego(){
 
@@ -99,13 +101,22 @@ public class Juego {
                     turno++;
                     break;
 
+                case "":
+                    tablero.imprimeTablero();
+                    turno ++;
+                    break;
+
             }
 
             actualizarSoles();
             actualizaTiempoJugando();
             System.out.println("Tienes " +  soles + " soles y es el turno " + turno);
+            //generaZombies(dificultad, turno);
 
 
+
+            desplazarZombie(z);
+            desplazarZombie(z1);
 
             input = scanner.nextLine();
             comando = input.split(" ");
@@ -127,6 +138,31 @@ public class Juego {
         });
     }
 
+    public void desplazarZombie(Zombie zombie){
+        int fila = zombie.getFila();
+        int columna = zombie.getColumna();
+        tablero.añadirPersonaje(zombie, fila, columna - 1);
+        tablero.eliminarPersonaje(fila, columna);
+        zombie.setColumna(columna-1);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     public void generaZombies (Dificultad dificultad, int turno){
         Random random = new Random();
         int filaIn = random.nextInt(inputFilas);
@@ -134,7 +170,7 @@ public class Juego {
         int numeroZombies = dificultad.getNumZombies();
         turnosZombies = new int[dificultad.getSinZombies() + dificultad.getTurnos()];
 
-        for (int i=0; i < turnosZombies.length-1; i++){
+        for (int i=0; i < turnosZombies.length; i++){
             turnosZombies[i] = 0;
         }
 
@@ -144,14 +180,13 @@ public class Juego {
                 turnosZombies[turnoZombie]++;
                 numeroZombies--;
             }
-
         }
-        /*
-        for (int i=0; i < turnosZombies.length-1; i++){
+
+        for (int i=0; i < turnosZombies.length; i++){
             System.out.println("turno "+ i + " n zombi   " +  turnosZombies[i]);
-        }*/
+        }
 
-
+        /*
         if (turnosZombies[turno] > 0){
             int z = turnosZombies[turno];
             while(z > 0){
@@ -163,7 +198,7 @@ public class Juego {
                 } else filaIn = random.nextInt(inputFilas);
             }
 
-        }
+        }*/
 
     }
 }

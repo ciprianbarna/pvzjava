@@ -14,6 +14,18 @@ public class Zombie extends Personaje {
 
     }
 
+    public int getFila(){
+        return this.fila;
+    }
+
+    public int getColumna(){
+        return this.columna;
+    }
+
+    public void setColumna(int columna){
+        this.columna = columna;
+    }
+
     @Override
     public void imprimir() {
         System.out.print("Z("+ resistencia + ")");
