@@ -12,6 +12,10 @@ public class Girasol extends Personaje {
         super.daño = 0;
     }
 
+    public int getFrecuencia(){
+        return this.frecuencia;
+    }
+
     @Override
     public void imprimir() {
         System.out.print("G("+ resistencia + ")");

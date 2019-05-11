@@ -1,6 +1,5 @@
 package pvz;
 
-import java.util.Random;
 
 public class Tablero {
 
@@ -34,19 +33,6 @@ public class Tablero {
         tablero[fila][columna] = null ;
     }
 
- // creo q esto se hace luego en jugo.java
-    public void generaZombies (Dificultad dificultad){
-        Random random = new Random();
-        int rand = random.nextInt(filas);
-        int numeroZombies = dificultad.getNumZombies();
-
-        while (numeroZombies > 0) {
-            Zombie zombie = new Zombie();
-            añadirPersonaje(zombie,rand, columnas-1);
-            numeroZombies--;
-        }
-
-    }
 
     public void imprimeTablero (){
         for (int i=0; i < filas; i++){

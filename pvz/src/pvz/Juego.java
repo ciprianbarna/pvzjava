@@ -1,6 +1,7 @@
 package pvz;
 
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.Scanner;
 
 public class Juego {
@@ -100,6 +101,25 @@ public class Juego {
             input = scanner.nextLine();
             comando = input.split(" ");
 
+        }
+
+    }
+
+    public void actualizarSoles(){
+        girasoles.forEach(girasol -> {
+            soles += girasol.getFrecuencia();
+        });
+    }
+
+    public void generaZombies (Dificultad dificultad){
+        Random random = new Random();
+        int rand = random.nextInt(inputFilas);
+        int numeroZombies = dificultad.getNumZombies();
+
+        while (numeroZombies > 0) {
+            Zombie zombie = new Zombie();
+            tablero.añadirPersonaje(zombie,rand, inputColumnas-1);
+            numeroZombies--;
         }
 
     }
