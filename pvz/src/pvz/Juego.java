@@ -75,8 +75,8 @@ public class Juego {
                     Girasol girasol = new Girasol();
                     inputFilas = Integer.parseInt(comando[1]);
                     inputColumnas = Integer.parseInt(comando[2]);
-                    if (tablero.casillaVacia(inputFilas, inputColumnas)){
-                        tablero.añadirPersonaje(girasol, inputFilas, inputColumnas);
+                    if (tablero.casillaVacia(inputFilas-1, inputColumnas-1)){
+                        tablero.añadirPersonaje(girasol, inputFilas-1, inputColumnas-1);
                     } else System.out.println("No se puede añadir un girasol en la posición indicada. Casilla ocupada");
                     girasoles.add(girasol);
 
@@ -87,8 +87,8 @@ public class Juego {
                     LanzaGuisantes lanza = new LanzaGuisantes();
                     inputFilas = Integer.parseInt(comando[1]);
                     inputColumnas = Integer.parseInt(comando[2]);
-                    if (tablero.casillaVacia(inputFilas, inputColumnas)){
-                        tablero.añadirPersonaje(lanza, inputFilas, inputColumnas);
+                    if (tablero.casillaVacia(inputFilas-1, inputColumnas-1)){
+                        tablero.añadirPersonaje(lanza, inputFilas-1, inputColumnas-1);
                     } else System.out.println("No se puede añadir un lanza guisantes en la posición indicada. Casilla ocupada");
                     lanzaGuisantes.add(lanza);
 
