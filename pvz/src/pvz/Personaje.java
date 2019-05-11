@@ -17,4 +17,16 @@ public class  Personaje {
     public void incrementarTiempoJugando() {
         tiempoJugando++;
     }
+
+    public int getResistencia(){
+        return resistencia;
+    }
+
+    public int getFila(){
+        return fila;
+    }
+
+    public int getColumna(){
+        return columna;
+    }
 }

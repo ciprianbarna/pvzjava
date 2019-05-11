@@ -12,7 +12,7 @@ public class Girasol extends Personaje {
         this.solesNuevos = 10;
         this.coste = 20;
         this.daño = 0;
-        this.tiempoJugando = 0;
+        this.tiempoJugando = 1;
         this.fila = fila;
         this.columna = columna;
     }

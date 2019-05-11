@@ -9,6 +9,8 @@ public class Juego {
     private int soles = 50; //soles iniciales 50
     private int turno = 1; //turno actual
     private String input;
+    private int filaInicial;
+    private int columnaInicial;
     private int inputFilas;
     private int inputColumnas;
     private Dificultad dificultad;
@@ -31,11 +33,12 @@ public class Juego {
 
         Scanner scanner = new Scanner(System.in);
 
-        input = scanner.nextLine();
-        String[] comando = input.split(" ");
+
 
 
         while(!salir && !derrotado){
+            input = scanner.nextLine();
+            String[] comando = input.split(" ");
 
             switch(comando[0]){
                 case "ayuda":
@@ -53,8 +56,8 @@ public class Juego {
                     break;
 
                 case "N":
-                    inputFilas = Integer.parseInt(comando[1]);
-                    inputColumnas = Integer.parseInt(comando[2]);
+                    filaInicial = Integer.parseInt(comando[1]);
+                    columnaInicial = Integer.parseInt(comando[2]);
                     switch (comando[3]){
                         case "BAJA" : dificultad = dificultad.BAJA; break;
                         case "MEDIA" : dificultad = dificultad.MEDIA; break;
@@ -63,7 +66,7 @@ public class Juego {
                     }
 
                     zombiesRestantes = dificultad.getNumZombies(); // quiza sobra jeje
-                    tablero = new Tablero(inputFilas, inputColumnas);
+                    tablero = new Tablero(filaInicial, columnaInicial);
                     generaZombies(dificultad);
 
                     System.out.println("Comienza la partida...");
@@ -73,25 +76,29 @@ public class Juego {
                 case "G":
                     inputFilas = Integer.parseInt(comando[1]);
                     inputColumnas = Integer.parseInt(comando[2]);
-                    Girasol girasol = new Girasol(inputFilas-1, inputColumnas-1);
-                    if (tablero.casillaVacia(inputFilas-1, inputColumnas-1)){
-                        tablero.añadirPersonaje(girasol, inputFilas-1, inputColumnas-1);
-                    } else System.out.println("No se puede añadir un girasol en la posición indicada. Casilla ocupada");
-                    girasoles.add(girasol);
+                    if(soles > 20){
+                        Girasol girasol = new Girasol(inputFilas-1, inputColumnas-1);
+                        if (tablero.casillaVacia(inputFilas-1, inputColumnas-1)){
+                            tablero.añadirPersonaje(girasol, inputFilas-1, inputColumnas-1);
+                            girasoles.add(girasol);
+                            turno++;
+                        } else System.out.println("No se puede añadir un girasol en la posición indicada. Casilla ocupada");
+                    } else System.out.println("No te lo puedes permitir. ");
 
-                    turno++;
                     break;
 
                 case "L":
                     inputFilas = Integer.parseInt(comando[1]);
                     inputColumnas = Integer.parseInt(comando[2]);
-                    LanzaGuisantes lanza = new LanzaGuisantes(inputFilas-1, inputColumnas-1);
-                    if (tablero.casillaVacia(inputFilas-1, inputColumnas-1)){
-                        tablero.añadirPersonaje(lanza, inputFilas-1, inputColumnas-1);
-                    } else System.out.println("No se puede añadir un lanza guisantes en la posición indicada. Casilla ocupada");
-                    lanzaGuisantes.add(lanza);
+                    if (soles > 50) {
+                        LanzaGuisantes lanza = new LanzaGuisantes(inputFilas-1, inputColumnas-1);
+                        if (tablero.casillaVacia(inputFilas-1, inputColumnas-1)){
+                            tablero.añadirPersonaje(lanza, inputFilas-1, inputColumnas-1);
+                            lanzaGuisantes.add(lanza);
+                            turno++;
+                        } else System.out.println("No se puede añadir un lanza guisantes en la posición indicada. Casilla ocupada");
+                    } else System.out.println("No te lo puedes permitir. ");
 
-                    turno++;
                     break;
 
                 case "":
@@ -117,17 +124,19 @@ public class Juego {
                 });
 
                 ataque();
+                borraMuertos();
 
                 zombies.forEach(zombie -> {
                    if(finPartida(zombie)) derrotado = true;
                 });
 
                 tablero.imprimeTablero();
-
+                /*
                 if(!derrotado) {
+                    //scanner.next();
                     input = scanner.nextLine();
                     comando = input.split(" ");
-                }
+                }*/
             }
 
         }
@@ -186,18 +195,18 @@ public class Juego {
 
     public void insertaZombies(int[] turnosZombies, int turno){
         Random random = new Random();
-        int filaIn = random.nextInt(inputFilas);
+        int filaIn = random.nextInt(filaInicial);
 
         if (turnosZombies[turno] > 0){
             int z = turnosZombies[turno];
             while(z > 0){
-                if (tablero.casillaVacia( filaIn, inputColumnas-1)){
-                    Zombie zombie = new Zombie(filaIn, inputColumnas-1);
+                if (tablero.casillaVacia( filaIn, columnaInicial-1)){
+                    Zombie zombie = new Zombie(filaIn, columnaInicial-1);
                     zombiesRestantes--;
-                    tablero.añadirPersonaje(zombie, filaIn, inputColumnas-1);
+                    tablero.añadirPersonaje(zombie, filaIn, columnaInicial-1);
                     zombies.add(zombie);
                     z--;
-                } else filaIn = random.nextInt(inputFilas);
+                } else filaIn = random.nextInt(filaInicial);
             }
 
         }
@@ -214,10 +223,22 @@ public class Juego {
                 if(lanza.getFila() == zombie.getFila()) {
                     zombie.recibeDaño();
                 }
-                if(lanza.getFila() == zombie.getFila()-1){
+                if(lanza.getFila() == zombie.getFila()){
                     lanza.recibeDaño();
                 }
             });
+        });
+    }
+
+    public void borraMuertos(){
+        girasoles.forEach(girasol -> {
+            if (girasol.getResistencia()==0) tablero.eliminarPersonaje(girasol.getFila(), girasol.getColumna());
+        });
+        zombies.forEach(zombie -> {
+            if (zombie.getResistencia()==0) tablero.eliminarPersonaje(zombie.getFila(), zombie.getColumna());
+        });
+        lanzaGuisantes.forEach(lanza-> {
+            if (lanza.getResistencia()==0) tablero.eliminarPersonaje(lanza.getFila(), lanza.getColumna());
         });
     }
 }

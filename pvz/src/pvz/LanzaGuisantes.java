@@ -19,13 +19,6 @@ public class LanzaGuisantes extends  Personaje{
         return coste;
     }
 
-    public int getColumna(){
-        return this.columna;
-    }
-
-    public int getFila(){
-        return this.fila;
-    }
 
     public void recibeDaño(){
         resistencia --;
