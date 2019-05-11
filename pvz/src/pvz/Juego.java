@@ -82,6 +82,7 @@ public class Juego {
                     girasoles.add(girasol);
 
                     tablero.imprimeTablero();
+                    turno++;
                     break;
 
                 case "L":
@@ -94,12 +95,16 @@ public class Juego {
                     lanzaGuisantes.add(lanza);
 
                     tablero.imprimeTablero();
+                    turno++;
                     break;
 
             }
 
-            if (turno%2==0) actualizarSoles();
-            System.out.println("Tienes " +  soles + " tantos soles");
+            actualizarSoles();
+            actualizaTiempoJugando();
+            System.out.println("Tienes " +  soles + " soles y es el turno " + turno);
+
+
 
             input = scanner.nextLine();
             comando = input.split(" ");
@@ -110,21 +115,30 @@ public class Juego {
 
     public void actualizarSoles(){
         girasoles.forEach(girasol -> {
-            soles += girasol.getFrecuencia();
+            if(girasol.getTiempoJugando() % girasol.getFrecuencia() == 0)
+                soles += girasol.getSolesNuevos();
+        });
+    }
+
+    public void actualizaTiempoJugando (){
+        girasoles.forEach(girasol -> {
+            girasol.incrementarTiempoJugando();
         });
     }
 
     public void generaZombies (Dificultad dificultad){
         Random random = new Random();
-        int rand = random.nextInt(inputFilas);
+        int filaIn = random.nextInt(inputFilas);
+        int turno = random.nextInt(dificultad.getTurnos()) + dificultad.getSinZombies();
         int numeroZombies = dificultad.getNumZombies();
 
         while (numeroZombies > 0) {
-            Zombie zombie = new Zombie();
-            tablero.añadirPersonaje(zombie,rand, inputColumnas-1);
-            numeroZombies--;
+            if(tablero.casillaVacia(filaIn, inputColumnas-1)){
+                Zombie zombie = new Zombie();
+                tablero.añadirPersonaje(zombie, filaIn, inputColumnas-1);
+                numeroZombies--;
+                zombies.add(zombie);
+            }
         }
-
     }
-
 }
