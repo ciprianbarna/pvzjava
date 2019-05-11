@@ -98,6 +98,9 @@ public class Juego {
 
             }
 
+            if (turno%2==0) actualizarSoles();
+            System.out.println("Tienes " +  soles + " tantos soles");
+
             input = scanner.nextLine();
             comando = input.split(" ");
 
