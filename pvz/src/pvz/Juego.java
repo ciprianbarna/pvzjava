@@ -164,11 +164,13 @@ public class Juego {
     }
 
     public void desplazarZombie(Zombie zombie){
-        int fila = zombie.getFila();
-        int columna = zombie.getColumna();
-        tablero.añadirPersonaje(zombie, fila, columna - 1);
-        tablero.eliminarPersonaje(fila, columna);
-        zombie.setColumna(columna-1);
+        if(zombie.getResistencia()>0) {
+            int fila = zombie.getFila();
+            int columna = zombie.getColumna();
+            tablero.añadirPersonaje(zombie, fila, columna - 1);
+            tablero.eliminarPersonaje(fila, columna);
+            zombie.setColumna(columna - 1);
+        }
     }
 
 
@@ -223,7 +225,7 @@ public class Juego {
                 if(lanza.getFila() == zombie.getFila()) {
                     zombie.recibeDaño();
                 }
-                if(lanza.getFila() == zombie.getFila()){
+                if(lanza.getColumna() == zombie.getColumna()+1){
                     lanza.recibeDaño();
                 }
             });
@@ -232,13 +234,22 @@ public class Juego {
 
     public void borraMuertos(){
         girasoles.forEach(girasol -> {
-            if (girasol.getResistencia()==0) tablero.eliminarPersonaje(girasol.getFila(), girasol.getColumna());
+            if (girasol.getResistencia()==0) {
+                tablero.eliminarPersonaje(girasol.getFila(), girasol.getColumna());
+                girasoles.remove(girasol);
+            }
         });
         zombies.forEach(zombie -> {
-            if (zombie.getResistencia()==0) tablero.eliminarPersonaje(zombie.getFila(), zombie.getColumna());
+            if (zombie.getResistencia()==0){
+                tablero.eliminarPersonaje(zombie.getFila(), zombie.getColumna());
+                zombies.remove(zombie);
+            }
         });
         lanzaGuisantes.forEach(lanza-> {
-            if (lanza.getResistencia()==0) tablero.eliminarPersonaje(lanza.getFila(), lanza.getColumna());
+            if (lanza.getResistencia()==0){
+                tablero.eliminarPersonaje(lanza.getFila(), lanza.getColumna());
+                lanzaGuisantes.remove(lanza);
+            }
         });
     }
 }
