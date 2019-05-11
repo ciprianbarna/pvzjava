@@ -22,6 +22,19 @@ public class Tablero {
         tablero[fila][columna] = personaje;
     }
 
+    //hay que hacer que distinga o ver como diferenciamos entre cada objeto
+    public void actualizaTablero (){
+        for (int i=0; i < columnas; i++){
+            for (int j=0; j < filas; j++) {
+                if (tablero[i][j] == Girasol){
+
+                }
+            }
+        }
+    }
+
+
+
     //hay que añadirle a este método las decoraciones
     public void imprimeTablero (){
         for (int i=0; i < filas; i++){

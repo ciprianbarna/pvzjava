@@ -5,7 +5,7 @@ import java.util.Scanner;
 
 public class Juego {
 
-    static final int solesInicial = 50; //soles al inicio de partida
+    private int soles = 50; //soles iniciales 50
     private int turno = 1; //turno actual
 
     public static void main(String[] args) {
@@ -15,20 +15,19 @@ public class Juego {
         Zombie z = new Zombie();
         Tablero tablero = new Tablero(5,5);
 
-        //g.imprimir();
-        //l.imprimir();
-        //z.imprimir();
-
         tablero.añadirPersonaje(g, 0,0);
         tablero.añadirPersonaje(l,1,1);
         tablero.añadirPersonaje(z,0,1);
-
 
         System.out.println(tablero.getColumnas());
         System.out.println(tablero.getFilas());
         tablero.imprimeTablero();
 
 
+
+    }
+
+    public static void actualizaTablero(Tablero tablero){
 
     }
 }
