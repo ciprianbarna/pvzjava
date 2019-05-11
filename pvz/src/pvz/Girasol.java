@@ -4,7 +4,6 @@ public class Girasol extends Personaje {
 
     private  int frecuencia;
     private int coste;
-    private int tiempoJugando;
     private int solesNuevos;
 
     public Girasol (int fila, int columna){
@@ -13,7 +12,7 @@ public class Girasol extends Personaje {
         this.solesNuevos = 10;
         this.coste = 20;
         super.daño = 0;
-        this.tiempoJugando = 0;
+        super.tiempoJugando = 0;
         super.fila = fila;
         super.columna = columna;
     }
@@ -32,10 +31,6 @@ public class Girasol extends Personaje {
 
     public int getSolesNuevos() {
         return solesNuevos;
-    }
-
-    public void incrementarTiempoJugando() {
-        tiempoJugando++;
     }
 
     @Override

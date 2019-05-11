@@ -11,6 +11,7 @@ public class Zombie extends Personaje {
         super.fila = fila;
         super.columna = columna;
         this.velocidad = 1;
+        super.tiempoJugando = 0;
 
     }
 
@@ -24,6 +25,10 @@ public class Zombie extends Personaje {
 
     public void setColumna(int columna){
         this.columna = columna;
+    }
+
+    public int getTiempoJugando(){
+        return this.tiempoJugando;
     }
 
     @Override

@@ -5,11 +5,16 @@ public class  Personaje {
     protected int daño;
     protected int fila;
     protected int columna;
+    protected int tiempoJugando;
 
     public  Personaje(){
 
     }
 
     public void imprimir(){
+    }
+
+    public void incrementarTiempoJugando() {
+        tiempoJugando++;
     }
 }

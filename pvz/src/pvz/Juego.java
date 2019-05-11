@@ -17,6 +17,8 @@ public class Juego {
     private ArrayList<LanzaGuisantes> lanzaGuisantes = new ArrayList<>();
     private ArrayList<Zombie> zombies = new ArrayList<>();
     private int turnosZombies[];
+    private int zombiesRestantes;
+    private boolean salir = false;
     Zombie z = new Zombie(5,5);
     Zombie z1 = new Zombie (4,5);
 
@@ -33,9 +35,8 @@ public class Juego {
         input = scanner.nextLine();
         String[] comando = input.split(" ");
 
-        //for (int i=0; i<comando.length; i++) System.out.println(comando[i]);
 
-        while(comando[0]!="S"){
+        while(!salir){
 
             switch(comando[0]){
                 case "ayuda":
@@ -62,17 +63,13 @@ public class Juego {
                         case "IMPOSIBLE" : dificultad = dificultad.IMPOSIBLE; break;
                     }
 
+                    zombiesRestantes = dificultad.getNumZombies(); // quiza sobra jeje
                     tablero = new Tablero(inputFilas, inputColumnas);
+                    generaZombies(dificultad);
 
                     System.out.println("Comienza la partida...");
 
                     tablero.imprimeTablero();
-
-                /*
-                System.out.println("filas" +  inputFilas);
-                System.out.println("columnas" + inputColumnas);
-                System.out.println("dificultad" + dificultad.getValor());*/
-
                     break;
 
                 case "G":
@@ -106,22 +103,36 @@ public class Juego {
                     turno ++;
                     break;
 
+                case "S": salir = true; break;
+
             }
 
-            actualizarSoles();
-            actualizaTiempoJugando();
-            System.out.println("Tienes " +  soles + " soles y es el turno " + turno);
-            //generaZombies(dificultad, turno);
+            if(!salir) {
+                actualizarSoles();
+                actualizaTiempoJugando();
+                System.out.println("Soles: " + soles);
+                System.out.println("Turno: " + turno);
+                System.out.println("Turnos sin zombies: " + dificultad.getSinZombies());
+                System.out.println("Turnos restantes: " + (dificultad.getTurnos() + dificultad.getSinZombies()));
+                System.out.println("Zombies restantes por salir: " + zombiesRestantes);
 
+                insertaZombies(turnosZombies, turno);
+                zombiesRestantes = zombiesRestantes - zombies.size();
+                zombies.forEach(zombie -> {
+                    if(zombie.getTiempoJugando()!=0)  desplazarZombie(zombie);
+                });
 
+                zombies.forEach(zombie -> {
+                    zombie.incrementarTiempoJugando();
+                });
 
-            desplazarZombie(z);
-            desplazarZombie(z1);
-
-            input = scanner.nextLine();
-            comando = input.split(" ");
+                input = scanner.nextLine();
+                comando = input.split(" ");
+            }
 
         }
+
+        System.out.println("Fin de la partida. ");
 
     }
 
@@ -148,24 +159,8 @@ public class Juego {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    public void generaZombies (Dificultad dificultad, int turno){
+    public void generaZombies (Dificultad dificultad){
         Random random = new Random();
-        int filaIn = random.nextInt(inputFilas);
         int turnoZombie;
         int numeroZombies = dificultad.getNumZombies();
         turnosZombies = new int[dificultad.getSinZombies() + dificultad.getTurnos()];
@@ -182,23 +177,23 @@ public class Juego {
             }
         }
 
-        for (int i=0; i < turnosZombies.length; i++){
-            System.out.println("turno "+ i + " n zombi   " +  turnosZombies[i]);
-        }
+    }
 
-        /*
+    public void insertaZombies(int[] turnosZombies, int turno){
+        Random random = new Random();
+        int filaIn = random.nextInt(inputFilas);
+
         if (turnosZombies[turno] > 0){
             int z = turnosZombies[turno];
             while(z > 0){
-                if (tablero.casillaVacia(inputFilas, inputColumnas)){
-                    Zombie zombie = new Zombie(inputFilas, inputColumnas);
+                if (tablero.casillaVacia( filaIn, inputColumnas-1)){
+                    Zombie zombie = new Zombie(filaIn, inputColumnas-1);
                     tablero.añadirPersonaje(zombie, filaIn, inputColumnas-1);
                     zombies.add(zombie);
                     z--;
                 } else filaIn = random.nextInt(inputFilas);
             }
 
-        }*/
-
+        }
     }
 }
