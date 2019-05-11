@@ -30,6 +30,9 @@ public class Tablero {
         else return false;
     }
 
+    public void eliminarPersonaje(int fila, int columna){
+        tablero[fila][columna] = null ;
+    }
 
  // creo q esto se hace luego en jugo.java
     public void generaZombies (Dificultad dificultad){
