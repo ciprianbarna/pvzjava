@@ -34,9 +34,6 @@ public class Juego {
 
         Scanner scanner = new Scanner(System.in);
 
-
-
-
         while(!salir && !derrotado){
             input = scanner.nextLine();
             String[] comando = input.split(" ");
@@ -191,8 +188,6 @@ public class Juego {
         }
     }
 
-
-
     public void generaZombies (Dificultad dificultad){
         Random random = new Random();
         int turnoZombie;
@@ -280,4 +275,7 @@ public class Juego {
         });
     }
 
+    public String aMayusculas (String datos){
+        return datos.toUpperCase();
+    }
 }
