@@ -23,6 +23,7 @@ public class Juego {
     private boolean salir = false;
     private boolean derrotado = false;
     private boolean ayuda = false;
+    private Scanner scanner = new Scanner(System.in);
 
     public Juego(){
 
@@ -32,17 +33,13 @@ public class Juego {
         System.out.println("Bienvenid@ al juego de Plantas versus Zombies!!");
         System.out.println("(Teclear ayuda para obtener una lista de comandos. <Enter> para finalizar el turno)");
 
-        Scanner scanner = new Scanner(System.in);
 
         while(!salir && !derrotado){
-
             input = scanner.nextLine();
-            input = aMayusculas(input);
-
             String[] comando = input.split(" ");
 
             switch(comando[0]){
-                case "AYUDA":
+                case "ayuda":
                     System.out.println("Lista de comandos: ");
                     System.out.println("N <filas> <columnas> <Dificultad>: Nueva partida (Dificultad:BAJA, MEDIA, ALTA, IMPOSIBLE");
                     System.out.println("G <fila> <columna>: Colocar girasol. Únicamente se podrá añadir un nuevo Girasol por turno y");
@@ -76,16 +73,11 @@ public class Juego {
                     break;
 
                 case "G":
-                    inputFilas = Integer.parseInt(comando[1]);
-                    inputColumnas = Integer.parseInt(comando[2]);
-                    if(soles > 20){
-                        Girasol girasol = new Girasol(inputFilas-1, inputColumnas-1);
-                        if (tablero.casillaVacia(inputFilas-1, inputColumnas-1)){
-                            tablero.añadirPersonaje(girasol, inputFilas-1, inputColumnas-1);
-                            girasoles.add(girasol);
-                            turno++;
-                        } else System.out.println("No se puede añadir un girasol en la posición indicada. Casilla ocupada");
-                    } else System.out.println("No te lo puedes permitir. ");
+                    try{
+                        insertaGirasoles(comando);
+                    } catch(ExcepcionPlanta e) {
+                        System.out.println(e.getMessage());
+                    }
 
                     break;
 
@@ -129,12 +121,27 @@ public class Juego {
     public void insertaGirasoles(String[] comando) throws ExcepcionPlanta{
         inputFilas = Integer.parseInt(comando[1]);
         inputColumnas = Integer.parseInt(comando[2]);
-        if (soles < 20) {
-            throw new ExcepcionPlanta("No te lo puedes permitir.");
-        } else {
 
+        if (inputFilas > filaInicial || inputColumnas > columnaInicial || inputFilas <= 0 || inputColumnas <= 0 ){
+            throw new ExcepcionPlanta("No se pueden colocar los girasoles fuera del tablero. ");
+        } else if (!tablero.casillaVacia(inputFilas-1, inputColumnas-1)) {
+            throw new ExcepcionPlanta("No se puede insertar en la casilla seleccionada. Casilla ocupada" );
+        } else if (inputColumnas == columnaInicial){
+            throw new ExcepcionPlanta("No se puede insertar una planta en la última columna. ");
+        } else
+        {
+            Girasol girasol = new Girasol(inputFilas-1, inputColumnas-1);
+            if (soles < girasol.getCoste()) {
+                throw new ExcepcionPlanta("No hay soles suficientes.");
+            } else {
+                tablero.añadirPersonaje(girasol, inputFilas-1, inputColumnas-1);
+                girasoles.add(girasol);
+                soles -= girasol.getCoste();
+                turno++;
+            }
         }
     }
+
 
     public void accionesJuego(){
         incrementarSoles();
@@ -189,6 +196,8 @@ public class Juego {
             zombie.setColumna(columna - 1);
         }
     }
+
+
 
     public void generaZombies (Dificultad dificultad){
         Random random = new Random();
@@ -277,7 +286,4 @@ public class Juego {
         });
     }
 
-    public String aMayusculas (String datos){
-        return datos.toUpperCase();
-    }
 }
