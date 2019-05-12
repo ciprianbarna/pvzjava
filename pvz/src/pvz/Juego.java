@@ -58,6 +58,7 @@ public class Juego {
                     try{
                         creaPartida(comando);
                         partidaComenzada = true;
+                        accionesJuego();
                     } catch (ExcepcionJuego e){
                         System.out.println("ERROR:");
                         System.out.println(e.getMessage());
@@ -69,6 +70,7 @@ public class Juego {
                 case "G":
                     try{
                         insertaGirasoles(comando);
+                        accionesJuego();
                     } catch(ExcepcionPlanta e) {
                         System.out.println("ERROR:");
                         System.out.println(e.getMessage());
@@ -79,6 +81,7 @@ public class Juego {
                 case "L":
                     try{
                         insertaGuisantes(comando);
+                        accionesJuego();
                     } catch(ExcepcionPlanta e) {
                         System.out.println("ERROR:");
                         System.out.println(e.getMessage());
@@ -87,21 +90,17 @@ public class Juego {
                     break;
 
                 case "":
-                    turno ++;
+                    accionesJuego();
                     break;
 
-                case "S": salir = true; break;
+                case "S":
+                    salir = true;
+                    System.out.println("Ha escogido cerrar la aplicación. Fin de la partida.");
+                    break;
 
             }
-
-            if(!salir) {
-
-                //accionesJuego();
-            }
-
         }
 
-        if (salir) System.out.println("Ha escogido cerrar la aplicación. Fin de la partida.");
         if (derrotado) System.out.println("Ha perdido la partida. Gracias por jugar!!!");
 
         scanner.close();
@@ -207,7 +206,7 @@ public class Juego {
         });
 
         tablero.imprimeTablero();
-
+        turno++;
     }
 
     public void incrementarSoles(){
