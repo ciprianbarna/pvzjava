@@ -35,11 +35,14 @@ public class Juego {
 
 
         while(!salir && !derrotado){
+
             input = scanner.nextLine();
+            input = aMayusculas(input);
+
             String[] comando = input.split(" ");
 
             switch(comando[0]){
-                case "ayuda":
+                case "AYUDA":
                     System.out.println("Lista de comandos: ");
                     System.out.println("N <filas> <columnas> <Dificultad>: Nueva partida (Dificultad:BAJA, MEDIA, ALTA, IMPOSIBLE");
                     System.out.println("G <fila> <columna>: Colocar girasol. Únicamente se podrá añadir un nuevo Girasol por turno y");
@@ -284,6 +287,10 @@ public class Juego {
 
             }
         });
+    }
+
+    public String aMayusculas(String datos){
+        return datos.toUpperCase();
     }
 
 }
