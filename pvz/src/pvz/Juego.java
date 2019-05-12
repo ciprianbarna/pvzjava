@@ -18,6 +18,7 @@ public class Juego {
     private ArrayList<Girasol> girasoles = new ArrayList<>();
     private ArrayList<LanzaGuisantes> lanzaGuisantes = new ArrayList<>();
     private ArrayList<Zombie> zombies = new ArrayList<>();
+    private ArrayList<Personaje> muertos = new ArrayList<>();
     private int turnosZombies[];
     private int zombiesRestantes;
     private boolean salir = false;
@@ -125,7 +126,6 @@ public class Juego {
                 tablero.añadirPersonaje(girasol, inputFilas-1, inputColumnas-1);
                 girasoles.add(girasol);
                 soles -= girasol.getCoste();
-                turno++;
             }
         }
     }
@@ -149,7 +149,6 @@ public class Juego {
                 tablero.añadirPersonaje(lanza, inputFilas-1, inputColumnas-1);
                 lanzaGuisantes.add(lanza);
                 soles -= lanza.getCoste();
-                turno++;
             }
         }
     }
@@ -182,7 +181,20 @@ public class Juego {
 
 
     public void accionesJuego(){
+        ataque();
+
+        borraZombies();
+        borraLanzaGuisantes();
+        borraGirasoles();
+
+        zombies.forEach(zombie -> {
+            if(zombie.getTiempoJugando()!=0 && turno%2==0) desplazarZombie(zombie);
+        });
+
         incrementarSoles();
+
+        insertaZombies(turnosZombies, turno);
+
         actualizaTiempoJugando();
 
         System.out.println("Soles: " + soles);
@@ -191,22 +203,14 @@ public class Juego {
         System.out.println("Turnos restantes: " + (dificultad.getTurnos() + dificultad.getSinZombies()));
         System.out.println("Zombies restantes por salir: " + zombiesRestantes);
 
-        insertaZombies(turnosZombies, turno);
-        zombies.forEach(zombie -> {
-            if(zombie.getTiempoJugando()!=0 && turno%2==0) desplazarZombie(zombie);
-        });
+        tablero.imprimeTablero();
 
-        ataque();
-        borraGirasoles();
-        borraLanzaGuisantes();
-        borraZombies();
+        turno++;
 
         zombies.forEach(zombie -> {
             if(finPartida(zombie)) derrotado = true;
         });
 
-        tablero.imprimeTablero();
-        turno++;
     }
 
     public void incrementarSoles(){
@@ -287,7 +291,7 @@ public class Juego {
                 if(lanza.getFila() == zombie.getFila()) {
                     zombie.recibeDaño();
                 }
-                if(lanza.getColumna() == zombie.getColumna()+1){
+                if(lanza.getColumna() == zombie.getColumna()-1){
                     lanza.recibeDaño();
                 }
             });
@@ -295,33 +299,39 @@ public class Juego {
     }
 
     public void borraLanzaGuisantes(){
-        lanzaGuisantes.forEach(lanza-> {
-            if (lanza.getResistencia()==0){
-                lanzaGuisantes.remove(lanza);
-                tablero.eliminarPersonaje(lanza.getFila(), lanza.getColumna());
 
+        lanzaGuisantes.forEach(lanza-> {
+            if (lanza.getResistencia()<1) {
+                tablero.eliminarPersonaje(lanza.getFila(), lanza.getColumna());
+                muertos.add(lanza);
             }
+
         });
+
+        lanzaGuisantes.removeAll(muertos);
+
     }
 
     public void borraGirasoles(){
         girasoles.forEach(girasol -> {
-            if (girasol.getResistencia()==0) {
-                girasoles.remove(girasol);
+            if (girasol.getResistencia()<1) {
                 tablero.eliminarPersonaje(girasol.getFila(), girasol.getColumna());
-
+                muertos.add(girasol);
             }
         });
+
+        girasoles.removeAll(muertos);
     }
 
     public void borraZombies(){
         zombies.forEach(zombie -> {
-            if (zombie.getResistencia()==0){
-                zombies.remove(zombie);
+            if (zombie.getResistencia()<1){
                 tablero.eliminarPersonaje(zombie.getFila(), zombie.getColumna());
-
+                muertos.add(zombie);
             }
         });
+
+        zombies.removeAll(muertos);
     }
 
     public String aMayusculas(String datos){
