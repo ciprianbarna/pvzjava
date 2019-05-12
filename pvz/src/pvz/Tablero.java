@@ -13,11 +13,6 @@ public class Tablero {
         this.filas = filas;
         this.columnas = columnas;
         tablero = new Personaje[filas][columnas];
-       /* for (int i=0; i < filas; i++){
-            for (int j=0; j < filas; j++){
-                tablero[i][j] = null;
-            }
-        }*/
     }
 
     public void añadirPersonaje (Personaje personaje, int fila, int columna){

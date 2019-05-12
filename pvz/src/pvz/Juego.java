@@ -126,6 +126,17 @@ public class Juego {
         scanner.close();
     }
 
+    public void insertaGirasoles(String[] comando) throws ExcepcionPlanta{
+        inputFilas = Integer.parseInt(comando[1]);
+        inputColumnas = Integer.parseInt(comando[2]);
+        if (soles < 20) {
+            throw new ExcepcionPlanta("No te lo puedes permitir.");
+        } else {
+
+        }
+    }
+
+
     public void accionesJuego(){
         incrementarSoles();
         actualizaTiempoJugando();
