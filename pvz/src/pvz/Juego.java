@@ -22,7 +22,7 @@ public class Juego {
     private int zombiesRestantes;
     private boolean salir = false;
     private boolean derrotado = false;
-    private boolean ayuda = false;
+    private boolean partidaComenzada = false;
     private Scanner scanner = new Scanner(System.in);
 
     public Juego(){
@@ -33,12 +33,10 @@ public class Juego {
         System.out.println("Bienvenid@ al juego de Plantas versus Zombies!!");
         System.out.println("(Teclear ayuda para obtener una lista de comandos. <Enter> para finalizar el turno)");
 
-
         while(!salir && !derrotado){
 
             input = scanner.nextLine();
             input = aMayusculas(input);
-
             String[] comando = input.split(" ");
 
             switch(comando[0]){
@@ -54,24 +52,17 @@ public class Juego {
                     System.out.println("S: Salir de la aplicación");
                     System.out.println("<Enter>: Pasar turno");
                     System.out.println("ayuda: este comando solicita a la aplicación que muestre la ayuda sobre cómo utilizar los comandos");
-                    ayuda = true;
                     break;
 
                 case "N":
-                    filaInicial = Integer.parseInt(comando[1]);
-                    columnaInicial = Integer.parseInt(comando[2]);
-                    switch (comando[3]){
-                        case "BAJA" : dificultad = dificultad.BAJA; break;
-                        case "MEDIA" : dificultad = dificultad.MEDIA; break;
-                        case "ALTA" : dificultad = dificultad.ALTA; break;
-                        case "IMPOSIBLE" : dificultad = dificultad.IMPOSIBLE; break;
+                    try{
+                        creaPartida(comando);
+                        partidaComenzada = true;
+                    } catch (ExcepcionJuego e){
+                        System.out.println("ERROR:");
+                        System.out.println(e.getMessage());
+                        System.out.println();
                     }
-
-                    zombiesRestantes = dificultad.getNumZombies(); // quiza sobra jeje
-                    tablero = new Tablero(filaInicial, columnaInicial);
-                    generaZombies(dificultad);
-
-                    System.out.println("Comienza la partida...");
 
                     break;
 
@@ -79,23 +70,20 @@ public class Juego {
                     try{
                         insertaGirasoles(comando);
                     } catch(ExcepcionPlanta e) {
+                        System.out.println("ERROR:");
                         System.out.println(e.getMessage());
+                        System.out.println();
                     }
-
                     break;
 
                 case "L":
-                    inputFilas = Integer.parseInt(comando[1]);
-                    inputColumnas = Integer.parseInt(comando[2]);
-                    if (soles > 50) {
-                        LanzaGuisantes lanza = new LanzaGuisantes(inputFilas-1, inputColumnas-1);
-                        if (tablero.casillaVacia(inputFilas-1, inputColumnas-1)){
-                            tablero.añadirPersonaje(lanza, inputFilas-1, inputColumnas-1);
-                            lanzaGuisantes.add(lanza);
-                            turno++;
-                        } else System.out.println("No se puede añadir un lanza guisantes en la posición indicada. Casilla ocupada");
-                    } else System.out.println("No te lo puedes permitir. ");
-
+                    try{
+                        insertaGuisantes(comando);
+                    } catch(ExcepcionPlanta e) {
+                        System.out.println("ERROR:");
+                        System.out.println(e.getMessage());
+                        System.out.println();
+                    }
                     break;
 
                 case "":
@@ -106,11 +94,9 @@ public class Juego {
 
             }
 
-            if(!salir && !ayuda) {
+            if(!salir) {
 
-                accionesJuego();
-
-                ayuda = false;
+                //accionesJuego();
             }
 
         }
@@ -143,6 +129,56 @@ public class Juego {
                 turno++;
             }
         }
+    }
+
+    public void insertaGuisantes (String[] comando) throws ExcepcionPlanta {
+        inputFilas = Integer.parseInt(comando[1]);
+        inputColumnas = Integer.parseInt(comando[2]);
+
+        if (inputFilas > filaInicial || inputColumnas > columnaInicial ||  inputFilas <= 0 || inputColumnas <= 0 ){
+            throw new ExcepcionPlanta("No se pueden colocar los lanza guisantes fuera del tablero. ");
+        } else if (!tablero.casillaVacia(inputFilas-1, inputColumnas-1)) {
+            throw new ExcepcionPlanta("No se puede insertar en la casilla seleccionada. Casilla ocupada" );
+        } else if (inputColumnas == columnaInicial){
+            throw new ExcepcionPlanta("No se puede insertar una planta en la última columna. ");
+        } else
+        {
+            LanzaGuisantes lanza = new LanzaGuisantes( inputFilas-1, inputColumnas-1);
+            if (soles < lanza.getCoste()) {
+                throw new ExcepcionPlanta("No hay soles suficientes.");
+            } else {
+                tablero.añadirPersonaje(lanza, inputFilas-1, inputColumnas-1);
+                lanzaGuisantes.add(lanza);
+                soles -= lanza.getCoste();
+                turno++;
+            }
+        }
+    }
+
+    public void creaPartida(String[] comando) throws ExcepcionJuego{
+        if (partidaComenzada) {
+            throw new ExcepcionJuego("Ya está jugando una partida.");
+        } else if (comando.length < 4){
+            throw new ExcepcionJuego("Faltan argumentos para poder comenzar la partida. Consulte la sección de ayuda");
+        } else if(!comando[3].equals("BAJA") && !comando[3].equals("MEDIA") && !comando[3].equals("ALTA") && !comando[3].equals("IMPOSIBLE")){
+            throw new ExcepcionJuego("Ha introducido una dificultad no valida. Consulte la sección de ayuda");
+        } else {
+            filaInicial = Integer.parseInt(comando[1]);
+            columnaInicial = Integer.parseInt(comando[2]);
+
+            switch (comando[3]){
+                case "BAJA" : dificultad = dificultad.BAJA; break;
+                case "MEDIA" : dificultad = dificultad.MEDIA; break;
+                case "ALTA" : dificultad = dificultad.ALTA; break;
+                case "IMPOSIBLE" : dificultad = dificultad.IMPOSIBLE; break;
+            }
+
+            zombiesRestantes = dificultad.getNumZombies();
+            tablero = new Tablero(filaInicial, columnaInicial);
+            generaZombies(dificultad);
+            System.out.println("Comienza la partida...");
+        }
+
     }
 
 
