@@ -22,6 +22,7 @@ public class Juego {
     private int zombiesRestantes;
     private boolean salir = false;
     private boolean derrotado = false;
+    private boolean ayuda = false;
 
     public Juego(){
 
@@ -53,6 +54,7 @@ public class Juego {
                     System.out.println("S: Salir de la aplicación");
                     System.out.println("<Enter>: Pasar turno");
                     System.out.println("ayuda: este comando solicita a la aplicación que muestre la ayuda sobre cómo utilizar los comandos");
+                    ayuda = true;
                     break;
 
                 case "N":
@@ -109,34 +111,11 @@ public class Juego {
 
             }
 
-            if(!salir) {
-                actualizarSoles();
-                actualizaTiempoJugando();
-                System.out.println("Soles: " + soles);
-                System.out.println("Turno: " + turno);
-                System.out.println("Turnos sin zombies: " + dificultad.getSinZombies());
-                System.out.println("Turnos restantes: " + (dificultad.getTurnos() + dificultad.getSinZombies()));
-                System.out.println("Zombies restantes por salir: " + zombiesRestantes);
+            if(!salir && !ayuda) {
 
-                insertaZombies(turnosZombies, turno);
-                zombies.forEach(zombie -> {
-                    if(zombie.getTiempoJugando()!=0 && turno%2==0) desplazarZombie(zombie);
-                });
+                accionesJuego();
 
-                ataque();
-                borraMuertos();
-
-                zombies.forEach(zombie -> {
-                   if(finPartida(zombie)) derrotado = true;
-                });
-
-                tablero.imprimeTablero();
-                /*
-                if(!derrotado) {
-                    //scanner.next();
-                    input = scanner.nextLine();
-                    comando = input.split(" ");
-                }*/
+                ayuda = false;
             }
 
         }
@@ -147,7 +126,35 @@ public class Juego {
         scanner.close();
     }
 
-    public void actualizarSoles(){
+    public void accionesJuego(){
+        incrementarSoles();
+        actualizaTiempoJugando();
+
+        System.out.println("Soles: " + soles);
+        System.out.println("Turno: " + turno);
+        System.out.println("Turnos sin zombies: " + dificultad.getSinZombies());
+        System.out.println("Turnos restantes: " + (dificultad.getTurnos() + dificultad.getSinZombies()));
+        System.out.println("Zombies restantes por salir: " + zombiesRestantes);
+
+        insertaZombies(turnosZombies, turno);
+        zombies.forEach(zombie -> {
+            if(zombie.getTiempoJugando()!=0 && turno%2==0) desplazarZombie(zombie);
+        });
+
+        ataque();
+        borraGirasoles();
+        borraLanzaGuisantes();
+        borraZombies();
+
+        zombies.forEach(zombie -> {
+            if(finPartida(zombie)) derrotado = true;
+        });
+
+        tablero.imprimeTablero();
+
+    }
+
+    public void incrementarSoles(){
         girasoles.forEach(girasol -> {
             if(girasol.getTiempoJugando() % girasol.getFrecuencia() == 0)
                 soles += girasol.getSolesNuevos();
@@ -232,24 +239,34 @@ public class Juego {
         });
     }
 
-    public void borraMuertos(){
-        girasoles.forEach(girasol -> {
-            if (girasol.getResistencia()==0) {
-                tablero.eliminarPersonaje(girasol.getFila(), girasol.getColumna());
-                girasoles.remove(girasol);
-            }
-        });
-        zombies.forEach(zombie -> {
-            if (zombie.getResistencia()==0){
-                tablero.eliminarPersonaje(zombie.getFila(), zombie.getColumna());
-                zombies.remove(zombie);
-            }
-        });
+    public void borraLanzaGuisantes(){
         lanzaGuisantes.forEach(lanza-> {
             if (lanza.getResistencia()==0){
-                tablero.eliminarPersonaje(lanza.getFila(), lanza.getColumna());
                 lanzaGuisantes.remove(lanza);
+                tablero.eliminarPersonaje(lanza.getFila(), lanza.getColumna());
+
             }
         });
     }
+
+    public void borraGirasoles(){
+        girasoles.forEach(girasol -> {
+            if (girasol.getResistencia()==0) {
+                girasoles.remove(girasol);
+                tablero.eliminarPersonaje(girasol.getFila(), girasol.getColumna());
+
+            }
+        });
+    }
+
+    public void borraZombies(){
+        zombies.forEach(zombie -> {
+            if (zombie.getResistencia()==0){
+                zombies.remove(zombie);
+                tablero.eliminarPersonaje(zombie.getFila(), zombie.getColumna());
+
+            }
+        });
+    }
+
 }
